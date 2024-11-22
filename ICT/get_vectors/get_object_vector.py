@@ -1,0 +1,97 @@
+import argparse
+import torch
+import os
+import json
+from tqdm import tqdm
+import sys
+sys.path.append(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
+sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+sys.path.append(os.path.dirname(os.path.abspath(__file__)))
+from transformers import AutoProcessor, LlavaForConditionalGeneration
+from PIL import Image, ImageFilter
+import numpy as np
+
+from transformers import set_seed
+
+def eval_model(args):
+    
+    device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+    model = LlavaForConditionalGeneration.from_pretrained("llava-hf/llava-1.5-7b-hf")
+    model.to(device)
+    processor = AutoProcessor.from_pretrained("llava-hf/llava-1.5-7b-hf")
+
+    questions = [json.loads(q) for q in open(os.path.expanduser(args.question_file), "r")]
+
+    all_layer_wise_activations = []
+    all_head_wise_activations = []
+   
+    for line in tqdm(questions[:args.length]):        
+
+        idx = line["question_id"]
+        image_file = line["image"]
+        qs = line["text"]
+        gt_answer = line["label"]
+        if gt_answer == "yes":
+            image = Image.open(os.path.join(args.image_folder, str(idx)  ,"black.jpg"))
+            prompt = "USER: <image>\n"+qs+" ASSISTANT: " + gt_answer
+            device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+            inputs = processor(text=prompt, images=image, return_tensors="pt").to(device)
+        else:
+            image = Image.open(os.path.join(args.image_folder, image_file))
+            prompt = "USER: <image>\n"+qs+" ASSISTANT: " + gt_answer
+            blurred_image = image.filter(ImageFilter.GaussianBlur(radius=5))
+            blurred_overlay = Image.blend(image, blurred_image, alpha=1)
+            device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+            inputs = processor(text=prompt, images=blurred_overlay, return_tensors="pt").to(device)
+
+        HEADS = [f"language_model.model.layers.{i}.self_attn.o_proj" for i in range(32)]
+
+        outputs_dict = {}
+
+        def hook_fn(module, input, output):             
+            if module not in outputs_dict:
+                outputs_dict[module] = output.cpu()
+        layer_names = HEADS
+        layers = []
+        for name in layer_names:
+            module = dict([*model.named_modules()]).get(name)
+            if module:
+                layers.append(module)
+            else:
+                print(f"Module not found: {name}")
+        hook_handles = [layer.register_forward_hook(hook_fn) for layer in layers]
+
+        with torch.no_grad():
+            output = model(
+                **inputs,
+                output_hidden_states = True              
+            )
+            for handle in hook_handles:
+               handle.remove()
+
+            attention_output = tuple(outputs_dict.values())
+            attention_output = torch.stack(attention_output, dim = 0).detach().cpu().squeeze().numpy()
+            hidden_states = output.hidden_states
+            hidden_states = torch.stack(hidden_states, dim = 0).squeeze()
+            hidden_states = hidden_states.detach().cpu().numpy()
+            layer_wise_activations = hidden_states
+            head_wise_activations= attention_output
+            all_layer_wise_activations.append(layer_wise_activations[:,-1,:].copy())
+            all_head_wise_activations.append(head_wise_activations[:,-1,:].copy())
+
+    np.save(args.output, all_head_wise_activations)
+
+if __name__ == "__main__":
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--model-path", type=str, default="facebook/opt-350m")
+    parser.add_argument("--image-folder", type=str, default="")
+    parser.add_argument("--question_file", type=str, default="tables/question.jsonl")
+    parser.add_argument("--output", type=str, default=None)
+    parser.add_argument("--seed", type=int, default=42)
+    parser.add_argument("--length", type=int, default=3000)
+    args = parser.parse_args()
+    set_seed(args.seed)
+    eval_model(args)
+
+
+

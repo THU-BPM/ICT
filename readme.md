@@ -1,6 +1,23 @@
 # ICT 
-Official repo for ICT: Image-Object Cross-Level Trusted Intervention for Mitigating Object Hallucination in Large Vision-Language Models
+<a href="https://arxiv.org/abs/2411.15268" alt="arXiv">
+    <img src="https://img.shields.io/badge/arXiv-2411.15268-b31b1b.svg?style=flat" /></a>
+    
+Official repo for paper ICT: Image-Object Cross-Level Trusted Intervention for Mitigating Object Hallucination in Large Vision-Language Models accepted by CVPR 2025
 
+## 🎯 Overview
+![ICT_overview](figs/overview.jpg)
+![ICT_pipeline](figs/pipeline.jpg)
+- We introduce Image-Object Cross-Level Trusted Intervention (ICT), **a light weight and training-free** method that calculates an intervention direction to shift the model's focus towards different levels of visual information, enhancing its attention to high-level and fine-grained visual details.
+- The new **ICT** is formulated as follows:
+$$
+\begin{aligned}
+    \boldsymbol{H}^{(l+1)} &= \boldsymbol{H}^{(l)}+ \sum_{n=1}^{N} \Big( Attn_n^{(l)} (\boldsymbol{H}^{(l)}) \\ 
+    &+ \mathbb{I}_{\text{img},n}^{(l)} \alpha \boldsymbol{S}_{n}^{(l)} 
+    + \mathbb{I}_{\text{obj},n}^{(l)} \beta \boldsymbol{S}_{\text{obj},n}^{(l)} \Big) \cdot W_o^{(l)}.
+\end{aligned}
+$$
+
+- The proposed ICT effectively reduces the harmful over-reliance on **language prior** , a major cause of hallucinations in LVLMs, while preserveing the benifits of the useful ones.
 ## **Dependencies**  
 - **Image Datasets**: Required image datasets for the **Pope** benchmark.  
 - **Pope Question-Answer Pairs**: Ensure you have the necessary question and answer files for **Pope**.  
@@ -80,3 +97,15 @@ PhD Benchmark Evaluation
 ```bash
 python val_ict_phd.py
 ```
+## 📑 Citation
+If you find our project useful, we hope you can star our repo and cite our paper as follows:
+```
+@misc{chen2024ictimageobjectcrossleveltrusted,
+      title={ICT: Image-Object Cross-Level Trusted Intervention for Mitigating Object Hallucination in Large Vision-Language Models}, 
+      author={Junzhe Chen and Tianshu Zhang and Shiyu Huang and Yuwei Niu and Linfeng Zhang and Lijie Wen and Xuming Hu},
+      year={2024},
+      eprint={2411.15268},
+      archivePrefix={arXiv},
+      primaryClass={cs.CV},
+      url={https://arxiv.org/abs/2411.15268}, 
+}

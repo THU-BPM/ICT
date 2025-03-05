@@ -9,8 +9,9 @@ Official repo for paper ICT: Image-Object Cross-Level Trusted Intervention for M
 ![ICT_pipeline](figs/pipeline.jpg)
 - We introduce Image-Object Cross-Level Trusted Intervention (ICT), **a light weight and training-free** method that calculates an intervention direction to shift the model's focus towards different levels of visual information, enhancing its attention to high-level and fine-grained visual details.
 - The new **ICT** is formulated as follows:
+<br>
 ![formula](figs/formula.png)
-
+<br>
 
 - The proposed ICT effectively reduces the harmful over-reliance on **language prior** , a major cause of hallucinations in LVLMs, while preserveing the benifits of the useful ones.
 ## **Dependencies**  

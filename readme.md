@@ -1,6 +1,7 @@
 # ICT 
 <a href="https://arxiv.org/abs/2411.15268" alt="arXiv">
     <img src="https://img.shields.io/badge/arXiv-2411.15268-b31b1b.svg?style=flat" /></a>
+    
 Official repo for paper ICT: Image-Object Cross-Level Trusted Intervention for Mitigating Object Hallucination in Large Vision-Language Models accepted by CVPR 2025
 
 ## **Dependencies**  

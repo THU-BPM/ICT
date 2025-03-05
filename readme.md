@@ -1,5 +1,5 @@
 # ICT 
-Official repo for ICT: Image-Object Cross-Level Trusted Intervention for Mitigating Object Hallucination in Large Vision-Language Models
+Official repo for paper ICT: Image-Object Cross-Level Trusted Intervention for Mitigating Object Hallucination in Large Vision-Language Models accepted by CVPR 2025
 
 ## **Dependencies**  
 - **Image Datasets**: Required image datasets for the **Pope** benchmark.  

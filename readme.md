@@ -96,9 +96,9 @@ python val_ict_phd.py
 ## 📑 Citation
 If you find our project useful, we hope you can star our repo and cite our paper as follows:
 ```
-        @article{chen2024ict,
-          title={ICT: Image-Object Cross-Level Trusted Intervention for Mitigating Object Hallucination in Large Vision-Language Models},
-          author={Chen, Junzhe and Zhang, Tianshu and Huang, Shiyu and Niu, Yuwei and Zhang, Linfeng and Wen, Lijie and Hu, Xuming},
-          journal={arXiv preprint arXiv:2411.15268},
-          year={2024}
-        }
+@article{chen2024ict,
+    title={ICT: Image-Object Cross-Level Trusted Intervention for Mitigating Object Hallucination in Large Vision-Language Models},
+    author={Chen, Junzhe and Zhang, Tianshu and Huang, Shiyu and Niu, Yuwei and Zhang, Linfeng and Wen, Lijie and Hu, Xuming},
+    journal={arXiv preprint arXiv:2411.15268},
+    year={2024}
+}

@@ -1,11 +1,11 @@
 # ICT 
 <a href="https://arxiv.org/abs/2411.15268" alt="arXiv">
     <img src="https://img.shields.io/badge/arXiv-2411.15268-b31b1b.svg?style=flat" /></a>
-    
+
+[**🌐 Official Website**](https://chenjz24.github.io/ICT/)
 
 This repository contains the official implementation of our paper,  
-**ICT: Image-Object Cross-Level Trusted Intervention for Mitigating Object Hallucination in Large Vision-Language Models**,  
-which has been accepted to **CVPR 2025**.
+**ICT: Image-Object Cross-Level Trusted Intervention for Mitigating Object Hallucination in Large Vision-Language Models**,which has been accepted to **CVPR 2025**.
 
 ## 🎯 Overview
 ![ICT_overview](figs/overview.jpg)
